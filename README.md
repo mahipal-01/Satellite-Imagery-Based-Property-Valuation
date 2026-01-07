@@ -1,4 +1,4 @@
-# Multimodal Real Estate Valuation Pipeline 🏠
+# Satellite Imagery-Based Property Valuation 🏠
 
 A machine learning project that combines tabular housing data with satellite imagery to predict property market values using a hybrid regression approach.
 
@@ -66,16 +66,16 @@ By combining these modalities, the system leverages both structural property fea
 
 **Models Implemented:**
 
-1. **Tabular Data Only (16 features + 49 engineered features)**
-   - Linear Regression: R² = 0.6943, RMSE = $182,527.55
-   - Random Forest (150 estimators): R² = 0.6634, RMSE = $164,427.07
-   - XGBoost (500 estimators): R² = 0.7960, RMSE = $139,189.90
+1. **Tabular Data Only (16 features)**
+   - Linear Regression: R² = 0.6883, RMSE = $180823.37
+   - Random Forest (150 estimators): R² = 0.7593, RMSE = $146645.09
+   - **XGBoost (500 estimators): R² = 0.8530, RMSE = $125284.92**
 
 2. **Multimodal (Tabular + Image Features, 528 features total)**
    - Linear Regression: R² = 0.6943, RMSE = $182,527.55
    - Random Forest: R² = 0.6634, RMSE = $164,427.07
    - XGBoost: R² = 0.7960, RMSE = $139,189.90
-   - **MLP Neural Network: R² = 0.7247, RMSE = $190,996.69**
+   - MLP Neural Network: R² = 0.7247, RMSE = $190,996.69
 
 **Best Performing Model:** XGBoost Regressor (Tabular Data)
 - 500 boosting rounds
@@ -122,9 +122,9 @@ Feature Scaling/Encoding → Train-Test Split (80-20) → Model Training
 
 | Model | Data Type | R² Score | RMSE ($) | Remarks |
 |-------|-----------|----------|----------|---------|
-| Linear Regression | Tabular | 0.6943 | 182,527 | Baseline |
-| Random Forest | Tabular | 0.6634 | 164,427 | Lower R² despite lower RMSE |
-| XGBoost | Tabular | **0.7960** | **139,190** | Best overall |
+| Linear Regression | Tabular | 0.6883 | 180823.37 | Baseline |
+| Random Forest | Tabular | 0.7593 | 146645.09 | Lower R² despite lower RMSE |
+| XGBoost | Tabular | **0.8530** | **125284.92** | Best overall |
 | Linear Regression | Multimodal | 0.6943 | 182,527 | No improvement with images |
 | Random Forest | Multimodal | 0.6634 | 164,427 | No improvement with images |
 | XGBoost | Multimodal | **0.7960** | **139,190** | Consistent with tabular |
@@ -168,23 +168,7 @@ matplotlib >= 3.3
 seaborn >= 0.11
 ```
 
-### Installation
 
-```bash
-# Clone repository
-git clone <repository-url>
-cd real-estate-valuation
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up Mapbox API token
-export MAPBOX_TOKEN="your_mapbox_token_here"
-```
 
 ## Usage
 
@@ -209,21 +193,6 @@ export MAPBOX_TOKEN="your_mapbox_token_here"
 # Output: Model metrics and best model
 ```
 
-### 4. Make Predictions
-```python
-import joblib
-import pandas as pd
-
-# Load best model
-model = joblib.load('xgb_best.pkl')
-
-# Load test data
-test_data = pd.read_csv('test.csv')
-
-# Make predictions
-predictions = model.predict(test_data)
-print(predictions)
-```
 
 ## Key Insights
 
@@ -240,7 +209,6 @@ print(predictions)
 4. **Potential improvements**: 
    - Feature engineering: Additional derived metrics from coordinates
    - Ensemble methods: Combining multiple model predictions
-   - Hyperparameter tuning: Grid search across larger parameter space
 
 ### Geographic Patterns
 - Latitude and longitude show strong correlation with price
@@ -255,20 +223,7 @@ print(predictions)
 - **Output**: 512-dimensional feature vectors
 - **Advantage**: Transfer learning captures general visual patterns applicable to real estate
 
-### Hyperparameter Optimization
-```python
-# XGBoost Best Configuration
-XGBRegressor(
-    n_estimators=500,
-    max_depth=6,
-    learning_rate=0.05,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    objective='reg:squarederror',
-    random_state=42,
-    n_jobs=-1
-)
-```
+
 
 ### Data Processing Pipeline
 ```
@@ -278,45 +233,7 @@ Model Training → Cross-Validation → Hyperparameter Tuning →
 Final Evaluation
 ```
 
-## Future Enhancements
 
-1. **Advanced Computer Vision**
-   - Sentiment analysis of satellite imagery
-   - Road network extraction
-   - Green space quantification
-
-2. **Ensemble Methods**
-   - Stacking predictions from multiple models
-   - Weighted averaging based on performance
-
-3. **Time Series Analysis**
-   - Historical price trends
-   - Seasonal patterns in real estate markets
-
-4. **External Data Integration**
-   - School ratings and proximity
-   - Crime statistics
-   - Zoning information
-   - Economic indicators
-
-5. **Deployment**
-   - REST API for real-time predictions
-   - Web interface for property valuation
-   - Batch prediction pipeline
-
-## Project Metrics
-
-| Metric | Value |
-|--------|-------|
-| Total Properties | 21,612 |
-| Training Set | 16,208 (75%) |
-| Test Set | 5,404 (25%) |
-| Features (Tabular) | 16 |
-| Features (Visual) | 512 |
-| Best Model R² | 0.7960 |
-| Best Model RMSE | $139,190 |
-| Training Time | ~5 minutes |
-| Prediction Time | <1ms per property |
 
 ## File Descriptions
 
@@ -340,7 +257,7 @@ Final Evaluation
 **model_training.ipynb**
 - Purpose: Model development and evaluation
 - Models: Linear Regression, Random Forest, XGBoost, MLP
-- Metrics: R², RMSE, MAE
+- Metrics: R², RMSE
 - Output: Trained models and performance comparisons
 
 ## Challenges & Solutions
@@ -348,19 +265,12 @@ Final Evaluation
 | Challenge | Solution |
 |-----------|----------|
 | API rate limiting | Batch processing with delays |
-| Missing values | Handled via pandas dropna() |
 | Extreme outliers (33 bedrooms) | Removed based on domain knowledge |
 | Feature scaling differences | StandardScaler for numerical, OneHotEncoder for categorical |
 | Multimodal feature alignment | Concatenated processed features after normalization |
 | Model overfitting | Regularization, early stopping, cross-validation |
 
-## Contributing
 
-For improvements or modifications:
-1. Create a feature branch
-2. Make changes with clear commits
-3. Test on both tabular and multimodal pipelines
-4. Submit pull request with documentation
 
 ## License
 
@@ -369,14 +279,13 @@ This project is for educational and analytical purposes.
 ## Contact & Support
 
 For questions or collaboration opportunities:
-- GitHub Issues: [Link to issues]
-- Email: [Your contact]
+- Email: mahipal_m@ee.iitr.ac.in
 
 ## Acknowledgments
 
 - Mapbox for satellite imagery API
 - PyTorch and scikit-learn communities
-- Real estate data provided by [Source]
+- Real estate data
 
 ---
 
