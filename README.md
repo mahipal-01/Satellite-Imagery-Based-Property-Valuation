@@ -130,26 +130,7 @@ Feature Scaling/Encoding → Train-Test Split (80-20) → Model Training
 | XGBoost | Multimodal | **0.7960** | **139,190** | Consistent with tabular |
 | MLP Neural Net | Multimodal | 0.7247 | 190,997 | Deep learning baseline |
 
-## Repository Structure
 
-```
-project/
-├── README.md                          # Project documentation
-├── data-fetch.ipynb                   # Satellite image fetching
-├── preprocessing.ipynb                # Data cleaning & feature engineering
-├── model_training.ipynb               # Model training & evaluation
-├── data/
-│   ├── train1.xlsx                    # Raw training data
-│   ├── test2.xlsx                     # Raw test data
-│   ├── tabulardata.csv                # Processed training features
-│   ├── test.csv                       # Processed test features
-│   ├── imagedata.csv                  # Training image embeddings
-│   └── imagedataval.csv               # Test image embeddings
-├── images/                            # Training satellite imagery
-├── imagesval/                         # Test satellite imagery
-└── models/
-    └── xgb_best.pkl                   # Serialized best model
-```
 
 ## Installation & Setup
 
